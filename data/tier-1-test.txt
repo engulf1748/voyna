@@ -1,0 +1,12 @@
+# We simply mustn't use real-life websites for testing our
+# spider. We probably should do something we control semi-
+# completely, like gofe.app, haha.
+#
+# For now, just my website is certainly okay. Vercel can def.
+# handle a little traffic.
+
+# Should path components be ignored?
+
+https://codeberg.org/
+https://blog.codeberg.org/
+https://sourcehut.org/

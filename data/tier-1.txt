@@ -1,0 +1,48 @@
+# 
+# I'm not sure exactly what sort of domains to include, but I included a few 
+# ones I generally consider authentic within their respestive class.
+#
+# I assume we're also including subdomains on top of these?
+#
+# I also assume we're going to be unbiased here and include _all_ objectively
+# tier-one domains, like, for instance, facebook.com? If Facebook isn't
+# objectively tier-one, I quit.
+# 
+
+# Internal
+gofe.app
+
+# Source control
+github.com
+codeberg.org
+
+# Technology
+ubuntu.com
+kernel.org
+stackoverflow.com
+stackexchange.com
+mozilla.org
+firefox.com
+go.dev
+python.org
+
+## Open-source
+element.io
+signal.org
+torproject.org
+teddit.net
+
+## Corporate
+apple.com
+microsoft.com
+
+### Google
+google.com
+gmail.com
+
+# Social
+youtube.com
+twitter.com
+reddit.com
+facebook.com
+instagram.com

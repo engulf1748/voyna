@@ -1,0 +1,6 @@
+data/database
+
+# Individual executables
+main
+
+.DS_Store
