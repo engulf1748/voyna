@@ -7,7 +7,7 @@ import (
 	"sort"
 
 	"codeberg.org/voyna/voyna/paths"
-	"codeberg.org/voyna/voyna/spider"
+	"codeberg.org/voyna/voyna/site"
 )
 
 type Result struct {
@@ -47,17 +47,17 @@ func Search(query string) Results {
 		if err != nil {
 			continue
 		}
-		var site spider.Site
-		err = json.Unmarshal(b, &site)
+		var s site.Site
+		err = json.Unmarshal(b, &s)
 		if err != nil {
 			continue
 		}
 		var r Result
-		if m, c := site.Match(query); m {
-			r.Title = site.Title
+		if m, c := s.Match(query); m {
+			r.Title = s.Title
 			r.Context = c
-			r.URL = site.URL.String()
-			r.Tier = site.Tier
+			r.URL = s.URL.String()
+			r.Tier = s.Tier
 			res = append(res, r)
 		}
 	}

@@ -10,9 +10,10 @@ import (
 	"sync"
 	"time"
 
-	// "github.com/temoto/robotstxt"
+	"codeberg.org/voyna/voyna/site"
 
 	"golang.org/x/net/html"
+	// "github.com/temoto/robotstxt"
 )
 
 const MaxDepth = 3
@@ -50,7 +51,7 @@ func Get(u *url.URL) (*http.Response, error) {
 	return client.Do(req)
 }
 
-func Crawl(u *url.URL, ch chan Site, tier int) {
+func Crawl(u *url.URL, ch chan site.Site, tier int) {
 	if !(u.IsAbs() && u.Scheme == "https") {
 		return
 	}
@@ -73,7 +74,7 @@ func Crawl(u *url.URL, ch chan Site, tier int) {
 		return
 	}
 
-	var site Site
+	var s site.Site
 
 	// codeberg.org/ and codeberg.org are the same, even though their url.URL representations might be different
 	domain := strings.TrimSuffix(u.String(), "/")
@@ -87,9 +88,9 @@ func Crawl(u *url.URL, ch chan Site, tier int) {
 	seen.s[domain] = true
 	seen.Unlock()
 
-	site.URL = u
-	site.Tier = tier
-	site.IndexTime = time.Now()
+	s.URL = u
+	s.Tier = tier
+	s.IndexTime = time.Now()
 
 	resp, err := Get(u)
 	if err != nil || resp.StatusCode != 200 {
@@ -104,12 +105,12 @@ func Crawl(u *url.URL, ch chan Site, tier int) {
 		return
 	}
 
-	processTree(n, &site)
+	processTree(n, &s)
 
-	for _, u := range site.Links {
+	for _, u := range s.Links {
 		// TODO: crawl relative links too
 		go Crawl(u, ch, tier+1)
 	}
 
-	ch <- site
+	ch <- s
 }

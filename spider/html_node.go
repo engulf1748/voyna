@@ -5,6 +5,8 @@ import (
 	"strings"
 
 	"golang.org/x/net/html"
+
+	"codeberg.org/voyna/voyna/site"
 )
 
 var ignore = map[string]bool{
@@ -14,11 +16,11 @@ var ignore = map[string]bool{
 }
 
 // Processes an html.Node an places data in the passed Site pointer
-func processTree(n *html.Node, site *Site) {
+func processTree(n *html.Node, s *site.Site) {
 	var links []*url.URL
-	// site.Content
+	// s.Content
 	var b strings.Builder
-	// site.Keywords
+	// s.Keywords
 	var keywords []string
 	var f func(*html.Node)
 	f = func(n *html.Node) {
@@ -47,7 +49,7 @@ func processTree(n *html.Node, site *Site) {
 					}
 				}
 			} else if n.Data == "title" {
-				site.Title = n.FirstChild.Data // assuming nothing is embedded inside <title> except a text node
+				s.Title = n.FirstChild.Data // assuming nothing is embedded inside <title> except a text node
 			} else if ignore[n.Data] {
 				return
 			} else {
@@ -60,7 +62,7 @@ func processTree(n *html.Node, site *Site) {
 		}
 	}
 	f(n)
-	site.Content = b.String()
-	site.Links = links
-	site.Keywords = keywords
+	s.Content = b.String()
+	s.Links = links
+	s.Keywords = keywords
 }
