@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"codeberg.org/voyna/voyna/log4j"
 )
 
 // Path of domain-list file relative to this file.
@@ -16,7 +18,9 @@ func init() {
 	} else {
 		domainFilePath = "data/tier-1.txt"
 	}
+	// TODO: eliminate duplication
 	fmt.Printf("using domains from: %v\n", domainFilePath)
+	log4j.Logger.Printf("using domains from: %v\n", domainFilePath)
 }
 
 // Scans the domains file line-by-line and returns

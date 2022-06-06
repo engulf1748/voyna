@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"codeberg.org/voyna/voyna/log4j"
 	"codeberg.org/voyna/voyna/search"
 )
 
@@ -33,9 +34,13 @@ func sendJSON(w http.ResponseWriter, i interface{}) error {
 
 func handleSearch(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query().Get("q") // search query
+	log4j.Logger.Printf("Voyna server: received query %q", q)
 	// TODO: handle empty queries
 	rs := search.Search(q)
-	sendJSON(w, rs)
+	err := sendJSON(w, rs)
+	if err != nil {
+		log4j.Logger.Printf("Voyna server: could not respond query %q: %v", q, err)
+	}
 }
 
 func Start() {

@@ -2,7 +2,7 @@ package spider
 
 import (
 	// "fmt"
-	"log"
+	// "log"
 	"net/http"
 	"net/url"
 	// "os"
@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"codeberg.org/voyna/voyna/log4j"
 	"codeberg.org/voyna/voyna/site"
 
 	"golang.org/x/net/html"
@@ -53,6 +54,7 @@ func Get(u *url.URL) (*http.Response, error) {
 
 func Crawl(u *url.URL, ch chan site.Site, tier int) {
 	if !(u.IsAbs() && u.Scheme == "https") {
+		log4j.Logger.Printf("ignoring %q; not HTTPS or absolute link", u.String())
 		return
 	}
 
@@ -71,6 +73,7 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 
 	// TODO: Handle this better
 	if tier > 3 {
+		log4j.Logger.Printf("ignoring %q; tier: %q", u.String(), tier)
 		return
 	}
 
@@ -94,14 +97,14 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 
 	resp, err := Get(u)
 	if err != nil || resp.StatusCode != 200 {
-		log.Printf("GET failed (or returned non-200) for %s: %v; skipping . . .\n", domain, err)
+		log4j.Logger.Printf("GET failed (or returned non-200) for %q: %v; moving on . . .\n", domain, err)
 		return
 	}
 	defer resp.Body.Close()
 
 	n, err := html.Parse(resp.Body)
 	if err != nil {
-		log.Printf("html.Parse failed for %s: %v; skipping . . .\n", domain, err)
+		log4j.Logger.Printf("html.Parse failed for %s: %v; moving on . . .\n", domain, err)
 		return
 	}
 
