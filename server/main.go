@@ -1,4 +1,4 @@
-package server
+package main
 
 import (
 	"encoding/json"
@@ -48,4 +48,8 @@ func Start() {
 		mux.Handle(k, http.HandlerFunc(v))
 	}
 	http.ListenAndServe(":8080", mux)
+}
+
+func main() {
+	Start()
 }
