@@ -2,10 +2,11 @@ package search
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
+	"path/filepath"
 	"sort"
 
+	"codeberg.org/voyna/voyna/paths"
 	"codeberg.org/voyna/voyna/spider"
 )
 
@@ -32,7 +33,7 @@ func (r Results) Len() int {
 
 func Search(query string) Results {
 	var res Results
-	f, err := os.Open("data/database")
+	f, err := os.Open(paths.CrawlDir())
 	defer f.Close()
 	if err != nil {
 		panic(err)
@@ -42,7 +43,7 @@ func Search(query string) Results {
 		panic(err)
 	}
 	for _, n := range dN {
-		b, err := os.ReadFile(fmt.Sprintf("data/database/%s", n))
+		b, err := os.ReadFile(filepath.Join(paths.CrawlDir(), n))
 		if err != nil {
 			continue
 		}

@@ -4,10 +4,11 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"net/url"
 	"os"
+	"path/filepath"
 
+	"codeberg.org/voyna/voyna/paths"
 	"codeberg.org/voyna/voyna/spider"
 )
 
@@ -27,8 +28,8 @@ func Process(domains []string) {
 		go spider.Crawl(u, ch, 1)
 	}
 
-	// create data/database folder if it does not already exist
-	err := os.MkdirAll("data/database", 0700)
+	// create storage folder if it does not already exist
+	err := os.MkdirAll(paths.CrawlDir(), 0700)
 	if err != nil {
 		panic(err)
 	}
@@ -40,7 +41,8 @@ func Process(domains []string) {
 				break
 			}
 			// we cannot save files with URLs as names, for URLs contain "/" among other "special" characters
-			err = os.WriteFile(fmt.Sprintf("data/database/%s", stringSHA256(site.String())), b, 0600)
+			fN := filepath.Join(paths.CrawlDir(), stringSHA256(site.String()))
+			err = os.WriteFile(fN, b, 0600)
 			if err != nil {
 				// TODO
 			}
