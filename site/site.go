@@ -33,7 +33,10 @@ type Site struct {
 	Tier int
 
 	// it should be difficult to abuse keywords in a tier-based system
-	Keywords []string
+	Keywords []string // TODO: Change to 'Meta'Keywords?
+
+	// Description in the <meta> tag
+	MetaDescription string
 
 	References int
 

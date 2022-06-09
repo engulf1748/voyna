@@ -39,7 +39,7 @@ func processTree(n *html.Node, s *site.Site) {
 					}
 				}
 			} else if n.Data == "meta" {
-				m := make(map[string]string) // Why on earth is n.Attr a []string!
+				m := make(map[string]string) // Why on earth is n.Attr a []Attribute!
 				for _, v := range n.Attr {
 					m[v.Key] = v.Val
 				}
@@ -47,6 +47,8 @@ func processTree(n *html.Node, s *site.Site) {
 					for _, v := range strings.Split(m["content"], ",") {
 						keywords = append(keywords, v)
 					}
+				} else if m["name"] == "description" {
+					s.MetaDescription = m["content"]
 				}
 			} else if n.Data == "title" {
 				s.Title = n.FirstChild.Data // assuming nothing is embedded inside <title> except a text node
