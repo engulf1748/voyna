@@ -21,3 +21,5 @@
 > data.
 
 Evil?
+
+* https://courses.cs.washington.edu/courses/cse454/02au/polite-crawler.htm
