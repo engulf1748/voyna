@@ -45,7 +45,7 @@ func Get(u *url.URL) (*http.Response, error) {
 		URL:    u,
 		Header: make(http.Header),
 	}
-	req.Header.Set("User-Agent", "GofëBot")
+	req.Header.Set("User-Agent", "VoynaBot")
 	client := &http.Client{
 		Timeout: 20 * time.Second,
 	}
