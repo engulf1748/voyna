@@ -33,7 +33,7 @@ func (r Results) Len() int {
 
 func Search(query string) Results {
 	var res Results
-	f, err := os.Open(paths.CrawlDir())
+	f, err := os.Open(paths.CorpusDir)
 	defer f.Close()
 	if err != nil {
 		panic(err)
@@ -43,7 +43,7 @@ func Search(query string) Results {
 		panic(err)
 	}
 	for _, n := range dN {
-		b, err := os.ReadFile(filepath.Join(paths.CrawlDir(), n))
+		b, err := os.ReadFile(filepath.Join(paths.CorpusDir, n))
 		if err != nil {
 			continue
 		}

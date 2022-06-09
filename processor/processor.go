@@ -30,7 +30,7 @@ func Process(domains []string) {
 	}
 
 	// create storage folder if it does not already exist
-	err := os.MkdirAll(paths.CrawlDir(), 0700)
+	err := os.MkdirAll(paths.CorpusDir, 0700)
 	if err != nil {
 		panic(err)
 	}
@@ -42,7 +42,7 @@ func Process(domains []string) {
 				break
 			}
 			// we cannot save files with URLs as names, for URLs contain "/" among other "special" characters
-			fN := filepath.Join(paths.CrawlDir(), stringSHA256(s.String()))
+			fN := filepath.Join(paths.CorpusDir, stringSHA256(s.String()))
 			err = os.WriteFile(fN, b, 0600)
 			if err != nil {
 				// TODO

@@ -1,3 +1,5 @@
+// Contains default paths you might want to use. This package does not create
+// the directories or files it names, however, so please create them yourself.
 package paths
 
 import (
@@ -5,25 +7,34 @@ import (
 	"path/filepath"
 )
 
-var HomeDir string
-var RelDataPath = filepath.Join(".local", "share", "voyna")
+var (
+	homeDir       string
+	relStorageDir = filepath.Join(".local", "share", "voyna")
+	StorageDir    string
+	CorpusDir     string
+	LogsDir       string
+	EasyLogPath   string
+)
 
 const (
-	CrawlDirName = "crawler"
+	corpusDir   = "corpus"
+	logsDir     = "logs"
+	easyLogFile = "log"
 )
 
 func init() {
 	var err error
-	HomeDir, err = os.UserHomeDir()
+	homeDir, err = os.UserHomeDir()
 	if err != nil {
-		// TODO
+		panic(err)
 	}
+
+	StorageDir = join(homeDir, relStorageDir)
+	CorpusDir = join(StorageDir, corpusDir)
+	LogsDir = join(StorageDir, logsDir)
+	EasyLogPath = join(LogsDir, easyLogFile)
 }
 
-func DataDir(subdir ...string) string {
-	return filepath.Join(HomeDir, RelDataPath, filepath.Join(subdir...))
-}
-
-func CrawlDir() string {
-	return filepath.Join(DataDir(CrawlDirName))
+func join(dirs ...string) string {
+	return filepath.Join(dirs...)
 }
