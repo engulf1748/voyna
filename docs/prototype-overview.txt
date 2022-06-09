@@ -1,0 +1,62 @@
+(In the works.)
+
+The search engine we aim to build will likely contain the following components:
+
+1. Seed URLs
+
+  In our case, this would be the tier-1 domains.
+
+2. Spider (or Crawler)
+
+  The spider will crawl through the web-pages it is seeded with, storing their
+  textual content, meta information (such as from the <meta> tag), along with,
+  of course, their links. This information will be stored in a corpus, awaiting
+  further processing. Spider will also crawl the links pointed to by these
+  web-pages (and their links, and so on), up to a configurable "n" tiers (by
+  keeping track of tiers along the way). We must keep in mind our politeness
+  (schedule and keeping out of areas that sites do not wish accessed).
+
+  One computer cannot crawl the entire web--this must therefore be distributed.
+  In such a case, we might come across the following non-exhaustive set of
+  problems:
+
+  * Crawling the same page multiple times: each instance of spider must have
+    access to the set of web-pages already called (and that are still "fresh").
+
+3. Processor
+
+  The processor will process the pages stored in the corpus. It would consist of
+  the these parts: a tokenizer, an indexer, and an inverted indexer.
+
+  Again, the processor too will have to be distributed.
+
+These components are concerned directly with search results:
+
+1. Query Processor
+
+## Prototype 1 Overview
+
+We could spend our entire lives building a search engine. However, I would
+rather not. Let us continually work on incremental prototypes instead.
+
+For the first prototype, let us do away with distribution and any kind of
+"real" indexing. Here's what we could have:
+
+1. A polite (delay; robots.txt) crawler that stores the following of each page:
+  * page URL
+  * page title
+  * keywords and description found in the "meta" tag
+  * external and internal links
+  * page tier
+  * textual content
+  * number of references to it
+2. A file-based corpus.
+3. A search function that relies solely on keywords.
+4. A working link to the existing Gofë front-end.
+
+Here is what is out of scope for this primitive prototype:
+
+1. Page freshness: once we crawl a page, we are done with it.
+2. Distribution: we'll get to this in due time.
+3. Indexing: we'll get to this next.
+4. Any kind of NLP for both, page content and user queries.
