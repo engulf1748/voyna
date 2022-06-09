@@ -12,3 +12,12 @@
 * https://github.com/dragonflydb/dragonfly
 
 * https://tineye.com
+
+* https://www.spider.com/
+
+> The Internet is the largest database in the world. Spider allows real-time
+> access to this database. Captchas and IP blocking can't limit your crawling
+> freedom when you use us. With millions of residential IP addresses we get
+> data.
+
+Evil?
