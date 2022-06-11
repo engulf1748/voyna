@@ -3,7 +3,6 @@ package spider
 import (
 	// "fmt"
 	// "log"
-	"net/http"
 	"net/url"
 	// "os"
 	"strings"
@@ -11,10 +10,10 @@ import (
 	"time"
 
 	"codeberg.org/voyna/voyna/log4j"
+	"codeberg.org/voyna/voyna/request"
 	"codeberg.org/voyna/voyna/site"
 
 	"golang.org/x/net/html"
-	// "github.com/temoto/robotstxt"
 )
 
 const MaxDepth = 3
@@ -37,19 +36,6 @@ var hseen hostSeen
 func init() {
 	seen.s = make(map[string]bool)
 	hseen.s = make(map[string]int)
-}
-
-// TODO: move to separate file/package
-func Get(u *url.URL) (*http.Response, error) {
-	req := &http.Request{
-		URL:    u,
-		Header: make(http.Header),
-	}
-	req.Header.Set("User-Agent", "VoynaBot")
-	client := &http.Client{
-		Timeout: 20 * time.Second,
-	}
-	return client.Do(req)
 }
 
 func Crawl(u *url.URL, ch chan site.Site, tier int) {
@@ -91,11 +77,13 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 	seen.s[domain] = true
 	seen.Unlock()
 
+	// TODO: check if path component can be accessed, according to robots.txt
+
 	s.URL = u
 	s.Tier = tier
 	s.IndexTime = time.Now()
 
-	resp, err := Get(u)
+	resp, err := request.Get(u)
 	if err != nil || resp.StatusCode != 200 {
 		log4j.Logger.Printf("GET failed (or returned non-200) for %q: %v; moving on . . .\n", domain, err)
 		return
