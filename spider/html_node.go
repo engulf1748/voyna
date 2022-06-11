@@ -15,7 +15,7 @@ var ignore = map[string]bool{
 	"link":   true,
 }
 
-// Processes an html.Node an places data in the passed Site pointer
+// Processes an html.Node an places data in the passed Site pointer. Ensure s.URL is filled in.
 func processTree(n *html.Node, s *site.Site) {
 	var links []*url.URL
 	// s.Content
@@ -34,6 +34,10 @@ func processTree(n *html.Node, s *site.Site) {
 						if err != nil {
 							continue
 						}
+						if u.Path == "" { // fragments, I suppose; TODO: what to do about this?
+							continue
+						}
+						u = s.URL.ResolveReference(u) // returns a copy of u if it is an absolute URL
 						links = append(links, u)
 						break
 					}
