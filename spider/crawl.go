@@ -11,6 +11,7 @@ import (
 
 	"codeberg.org/voyna/voyna/log4j"
 	"codeberg.org/voyna/voyna/request"
+	"codeberg.org/voyna/voyna/robotex"
 	"codeberg.org/voyna/voyna/site"
 
 	"golang.org/x/net/html"
@@ -77,7 +78,15 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 	seen.s[domain] = true
 	seen.Unlock()
 
-	// TODO: check if path component can be accessed, according to robots.txt
+	allowed, err := robotex.Allowed(u)
+	if err != nil {
+		log4j.Logger.Printf("Allowed failed for %q: %v; moving on . . .\n", u, err)
+		return
+	}
+	if !allowed {
+		log4j.Logger.Printf("robots.txt disallowed crawling %q; moving on . . .\n", u)
+		return
+	}
 
 	s.URL = u
 	s.Tier = tier

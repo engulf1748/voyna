@@ -17,7 +17,7 @@ func Allowed(u *url.URL) (bool, error) {
 		return false, fmt.Errorf("non-absolute or non-https link")
 	}
 	un, err := url.Parse("https://" + u.Host + "/robots.txt") // TODO: do something more sensible
-	resp, err := requests.Get(un)
+	resp, err := request.Get(un)
 	var robots *robotstxt.RobotsData
 	if err != nil {
 		return false, err
