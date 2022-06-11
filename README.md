@@ -8,6 +8,18 @@ Voyna is an open-source search engine, presently in the works.
 
 TODO
 
+## Development
+
+Note that Voyna is in its very nascency--it is not suitable for your day-to-day
+usage. As of now, the crawler will almost certainly crash after creating a spate
+of goroutines.
+
+Run `go run .` in the project's root to start the crawler and processor. Then
+run `go run ./server/` to start the search server. Make sure to set your `DEV`
+environment variable to `true`: this gives you easy-to-read results. You can
+then query Voyna in the following way: `curl 'localhost:8080/search?q=openbsd'`.
+The 'q' query parameter represents your search query.
+
 ## License
 
 Voyna (A search engine.)
