@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"codeberg.org/voyna/voyna/log4j"
 	"codeberg.org/voyna/voyna/search"
@@ -15,7 +16,13 @@ func catchAll(w http.ResponseWriter, r *http.Request) {
 
 // Marshals 'i' and writes to ResponseWriter
 func sendJSON(w http.ResponseWriter, i interface{}) error {
-	b, err := json.Marshal(i)
+	var b []byte
+	var err error
+	if os.Getenv("DEV") != "true" {
+		b, err = json.Marshal(i)
+	} else {
+		b, err = json.MarshalIndent(i, "", "\t")
+	}
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return fmt.Errorf("sendJSON: error parsing to JSON: %v", err)
