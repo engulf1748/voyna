@@ -64,8 +64,6 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 		return
 	}
 
-	var s site.Site
-
 	// codeberg.org/ and codeberg.org are the same, even though their url.URL representations might be different
 	domain := strings.TrimSuffix(u.String(), "/")
 	// check if "u" was already processed
@@ -88,21 +86,23 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 		return
 	}
 
-	s.URL = u
-	s.Tier = tier
-	s.IndexTime = time.Now()
-
 	resp, err := request.Get(u)
 	if err != nil || resp.StatusCode != 200 {
-		log4j.Logger.Printf("GET failed (or returned non-200) for %q: %v; moving on . . .\n", domain, err)
+		log4j.Logger.Printf("GET failed (or returned non-200) for %q: %v; moving on . . .\n", u, err)
 		return
 	}
 	defer resp.Body.Close()
 
 	n, err := html.Parse(resp.Body)
 	if err != nil {
-		log4j.Logger.Printf("html.Parse failed for %s: %v; moving on . . .\n", domain, err)
+		log4j.Logger.Printf("html.Parse failed for %s: %v; moving on . . .\n", u, err)
 		return
+	}
+
+	s := site.Site{
+		URL:       u,
+		Tier:      tier,
+		IndexTime: time.Now(),
 	}
 
 	processTree(n, &s)
