@@ -5,6 +5,7 @@ import (
 	// "log"
 	"net/url"
 	// "os"
+	// "runtime"
 	// "strings"
 	"sync"
 	"time"
@@ -17,7 +18,10 @@ import (
 	"golang.org/x/net/html"
 )
 
-const MaxDepth = 3
+const (
+	MaxDepth  = 3
+	RateLimit = 10000
+)
 
 type safeSeen struct {
 	s map[string]bool
@@ -34,12 +38,21 @@ type hostSeen struct {
 var seen safeSeen
 var hseen hostSeen
 
+var rateLimitCh chan bool
+
 func init() {
 	seen.s = make(map[string]bool)
 	hseen.s = make(map[string]int)
+
+	rateLimitCh = make(chan bool, RateLimit)
 }
 
 func Crawl(u *url.URL, ch chan site.Site, tier int) {
+	rateLimitCh <- true
+	defer func() {
+		<-rateLimitCh
+	}()
+
 	if !(u.IsAbs() && u.Scheme == "https") {
 		log4j.Logger.Printf("ignoring %q; not HTTPS or absolute link", u.String())
 		return

@@ -55,6 +55,10 @@ func processTree(n *html.Node, s *site.Site) {
 					s.MetaDescription = m["content"]
 				}
 			} else if n.Data == "title" {
+				if n.FirstChild == nil {
+					// TODO: panic: runtime error: invalid memory address or nil pointer dereference
+					return
+				}
 				s.Title = n.FirstChild.Data // assuming nothing is embedded inside <title> except a text node
 			} else if ignore[n.Data] {
 				return
