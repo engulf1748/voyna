@@ -35,7 +35,10 @@ type hostSeen struct {
 	sync.Mutex
 }
 
+// Keeps track of the URLs we've seen so far.
 var seen safeSeen
+
+// Keep track of the hosts we've seen so far.
 var hseen hostSeen
 
 var rateLimitCh chan bool
@@ -72,7 +75,7 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 	hseen.Unlock()
 
 	// TODO: Handle this better
-	if tier > 3 {
+	if tier > MaxDepth {
 		log4j.Logger.Printf("ignoring %q; tier: %q", u.String(), tier)
 		return
 	}
