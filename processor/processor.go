@@ -38,10 +38,12 @@ func Process(urls []*url.URL) {
 			}
 			// we cannot save files with URLs as names, for URLs contain "/" among other "special" characters
 			fN := filepath.Join(paths.CorpusDir, stringSHA256(s.URL.String()))
-			err = os.WriteFile(fN, b, 0600)
-			if err != nil {
-				// TODO
-			}
+			go func() {
+				err := os.WriteFile(fN, b, 0600)
+				if err != nil {
+					// TODO
+				}
+			}()
 		}
 	}
 }
