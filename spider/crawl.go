@@ -5,7 +5,7 @@ import (
 	// "log"
 	"net/url"
 	// "os"
-	"strings"
+	// "strings"
 	"sync"
 	"time"
 
@@ -64,16 +64,16 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 		return
 	}
 
-	// codeberg.org/ and codeberg.org are the same, even though their url.URL representations might be different
-	domain := strings.TrimSuffix(u.String(), "/")
+	// TODO: Handle cases such as xyz.com/page and xyz.com/page/
+	surl := u.String()
 	// check if "u" was already processed
 	seen.Lock()
 
-	if seen.s[domain] == true {
+	if seen.s[surl] == true {
 		seen.Unlock()
 		return
 	}
-	seen.s[domain] = true
+	seen.s[surl] = true
 	seen.Unlock()
 
 	allowed, err := robotex.Allowed(u)

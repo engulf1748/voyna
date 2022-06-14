@@ -18,7 +18,7 @@ func catchAll(w http.ResponseWriter, r *http.Request) {
 func sendJSON(w http.ResponseWriter, i interface{}) error {
 	var b []byte
 	var err error
-	if os.Getenv("DEV") != "true" {
+	if os.Getenv("PROD") == "true" {
 		b, err = json.Marshal(i)
 	} else {
 		b, err = json.MarshalIndent(i, "", "\t")

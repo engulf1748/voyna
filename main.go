@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	domains := readDomains()
-	go processor.Process(domains)
+	urls := tierOneURLs()
+	go processor.Process(urls)
 
 	var wg sync.WaitGroup
 	wg.Add(1)

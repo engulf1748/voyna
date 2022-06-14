@@ -1,12 +1,6 @@
-# We simply mustn't use real-life websites for testing our
-# spider. We probably should do something we control semi-
-# completely, like gofe.app, haha.
-#
-# For now, just my website is certainly okay. Vercel can def.
-# handle a little traffic.
+# Tier 1 domains, in absolute URL form:
+# [scheme:][//[userinfo@]host][/]path[?query][#fragment]
+# Only the scheme and the host will be considered; the rest will be ignored.
 
-# Should path components be ignored?
-
-https://codeberg.org/
-https://blog.codeberg.org/
-https://sourcehut.org/
+https://codeberg.org
+https://sourcehut.org

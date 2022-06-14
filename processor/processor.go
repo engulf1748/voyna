@@ -18,14 +18,9 @@ func stringSHA256(s string) string {
 	return hex.EncodeToString(b[:])
 }
 
-func Process(domains []string) {
-	ch := make(chan site.Site, len(domains)) // TODO: figure out efficient channel capacity, if any
-	for _, domain := range domains {
-		u, err := url.Parse(domain)
-		if err != nil {
-			// TODO
-			continue
-		}
+func Process(urls []*url.URL) {
+	ch := make(chan site.Site, len(urls)) // TODO: figure out efficient channel capacity, if any
+	for _, u := range urls {
 		go spider.Crawl(u, ch, 1)
 	}
 
@@ -42,7 +37,7 @@ func Process(domains []string) {
 				break
 			}
 			// we cannot save files with URLs as names, for URLs contain "/" among other "special" characters
-			fN := filepath.Join(paths.CorpusDir, stringSHA256(s.String()))
+			fN := filepath.Join(paths.CorpusDir, stringSHA256(s.URL.String()))
 			err = os.WriteFile(fN, b, 0600)
 			if err != nil {
 				// TODO
