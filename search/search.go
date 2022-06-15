@@ -1,13 +1,14 @@
 package search
 
 import (
-	"encoding/json"
-	"os"
-	"path/filepath"
+	//"encoding/json"
+	//"os"
+	//"path/filepath"
 	"sort"
 
-	"codeberg.org/voyna/voyna/paths"
-	"codeberg.org/voyna/voyna/site"
+	//"codeberg.org/voyna/voyna/paths"
+	//"codeberg.org/voyna/voyna/site"
+	"codeberg.org/voyna/voyna/spider"
 )
 
 type Result struct {
@@ -33,25 +34,7 @@ func (r Results) Len() int {
 
 func Search(query string) Results {
 	var res Results
-	f, err := os.Open(paths.CorpusDir)
-	defer f.Close()
-	if err != nil {
-		panic(err)
-	}
-	dN, err := f.Readdirnames(0)
-	if err != nil {
-		panic(err)
-	}
-	for _, n := range dN {
-		b, err := os.ReadFile(filepath.Join(paths.CorpusDir, n))
-		if err != nil {
-			continue
-		}
-		var s site.Site
-		err = json.Unmarshal(b, &s)
-		if err != nil {
-			continue
-		}
+	for _, s := range spider.DB.M {
 		var r Result
 		if m, c := s.Match(query); m {
 			r.Title = s.Title

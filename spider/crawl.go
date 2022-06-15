@@ -23,8 +23,9 @@ const (
 	RateLimit = 10000
 )
 
-type safeSeen struct {
-	s map[string]bool
+type InMemoryDB struct {
+	M    map[string]*site.Site
+	Seen map[string]bool
 	// struct embedding--nice!
 	sync.Mutex
 }
@@ -36,15 +37,19 @@ type hostSeen struct {
 }
 
 // Keeps track of the URLs we've seen so far.
-var seen safeSeen
+var DB InMemoryDB
 
 // Keep track of the hosts we've seen so far.
 var hseen hostSeen
 
 var rateLimitCh chan bool
 
+var InMemory map[string]*site.Site
+
 func init() {
-	seen.s = make(map[string]bool)
+	DB.M = make(map[string]*site.Site)
+	DB.Seen = make(map[string]bool)
+
 	hseen.s = make(map[string]int)
 
 	rateLimitCh = make(chan bool, RateLimit)
@@ -83,14 +88,14 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 	// TODO: Handle cases such as xyz.com/page and xyz.com/page/
 	surl := u.String()
 	// check if "u" was already processed
-	seen.Lock()
-
-	if seen.s[surl] == true {
-		seen.Unlock()
+	DB.Lock()
+	if DB.Seen[surl] == true {
+		// Update reference count
+		DB.M[surl].References += 1
+		DB.Unlock()
 		return
 	}
-	seen.s[surl] = true
-	seen.Unlock()
+	DB.Unlock()
 
 	allowed, err := robotex.Allowed(u)
 	if err != nil {
@@ -120,6 +125,16 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 		Tier:      tier,
 		IndexTime: time.Now(),
 	}
+
+	DB.Lock()
+	if DB.Seen[surl] == true {
+		// some other goroutine has beat this one
+		DB.Unlock()
+		return
+	}
+	DB.Seen[surl] = true
+	DB.M[surl] = &s
+	DB.Unlock()
 
 	processTree(n, &s)
 
