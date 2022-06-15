@@ -8,6 +8,7 @@ import (
 
 	"codeberg.org/voyna/voyna/log4j"
 	"codeberg.org/voyna/voyna/search"
+	"codeberg.org/voyna/voyna/translator"
 )
 
 func catchAll(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +44,12 @@ func handleSearch(w http.ResponseWriter, r *http.Request) {
 	q := r.URL.Query().Get("q") // search query
 	log4j.Logger.Printf("Voyna server: received query %q", q)
 	// TODO: handle empty queries
-	rs := search.Search(q)
+	var rs interface{}
+	if os.Getenv("TRANSLATE") == "true" {
+		rs = translator.Search(q)
+	} else {
+		rs = search.Search(q)
+	}
 	err := sendJSON(w, rs)
 	if err != nil {
 		log4j.Logger.Printf("Voyna server: could not respond query %q: %v", q, err)
