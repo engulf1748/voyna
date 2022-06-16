@@ -22,6 +22,7 @@ func Allowed(u *url.URL) (bool, error) {
 	if err != nil {
 		return false, err
 	}
+	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
 		if resp.StatusCode != http.StatusNotFound {
 			return false, err
