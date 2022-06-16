@@ -7,7 +7,7 @@ import (
 
 func Search(query string) api.Result {
 	rs := search.Search(query)
-	result := api.Result{Links: make([]*api.Link, 0)}
+	result := api.Result{Links: []*api.Link{}}
 	for _, r := range rs {
 		result.Links = append(result.Links, &api.Link{Desc: r.Title, URL: r.URL, Context: r.Context})
 	}
