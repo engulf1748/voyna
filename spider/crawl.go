@@ -108,11 +108,16 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 	}
 
 	resp, err := request.Get(u)
-	if err != nil || resp.StatusCode != 200 {
-		log4j.Logger.Printf("GET failed (or returned non-200) for %q: %v; moving on . . .\n", u, err)
+	if err != nil  {
+		log4j.Logger.Printf("GET failed for %q: %v; moving on . . .\n", u, err)
 		return
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		log4j.Logger.Printf("GET returned non-200 code for %q: status code: %d; moving on . . .\n", u, resp.StatusCode)
+		return
+	}
 
 	n, err := html.Parse(resp.Body)
 	if err != nil {
