@@ -89,5 +89,11 @@ func (s *Site) Match(query string) (bool, string) {
 		}
 	}
 
+	for _, qword := range qwords {
+		if strings.Contains(s.URL.String(), qword) {
+			return true, qword
+		}
+	}
+
 	return false, ""
 }
