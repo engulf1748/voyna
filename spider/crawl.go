@@ -66,6 +66,11 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 		return
 	}
 
+	// Remove query parameters from u
+	u.RawQuery = ""
+	// Remove fragment from u
+	u.Fragment = ""
+
 	// "actual" tier, based on just host-name
 	hseen.Lock()
 	if t := hseen.s[u.Host]; t != 0 {
