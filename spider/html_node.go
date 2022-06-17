@@ -28,7 +28,6 @@ func processTree(n *html.Node, s *site.Site) {
 			if n.Data == "a" {
 				for _, v := range n.Attr {
 					if v.Key == "href" {
-						// TODO: Handle relative URLs
 						// TODO: deal with <button>'s being used to the effect of <a>
 						u, err := url.Parse(v.Val)
 						if err != nil {

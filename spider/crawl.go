@@ -79,7 +79,6 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 	}
 	hseen.Unlock()
 
-	// TODO: Handle this better
 	if tier > MaxDepth {
 		log4j.Logger.Printf("ignoring %q; tier: %q", u.String(), tier)
 		return
@@ -144,7 +143,6 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 	processTree(n, &s)
 
 	for _, u := range s.Links {
-		// TODO: crawl relative links too
 		go Crawl(u, ch, tier+1)
 	}
 
