@@ -16,8 +16,13 @@ func Allowed(u *url.URL) (bool, error) {
 	if !(u.IsAbs() && u.Scheme == "https") {
 		return false, fmt.Errorf("non-absolute or non-https link")
 	}
-	un, err := url.Parse("https://" + u.Host + "/robots.txt") // TODO: do something more sensible
-	resp, err := request.Get(un)
+
+	un := *u
+	// TODO: learn how to set the path component in an idiomatic way
+	un.RawPath, un.Path = "/robots.txt", "/robots.txt"
+	un.RawQuery, un.Fragment = "", ""
+
+	resp, err := request.Get(&un)
 	var robots *robotstxt.RobotsData
 	if err != nil {
 		return false, err
