@@ -5,31 +5,34 @@ import (
 	"testing"
 )
 
-type object struct {
-	u       *url.URL
-	allowed bool
-}
-
 func TestAllowed(t *testing.T) {
-	var objects []object
-	u1, _ := url.Parse("https://sr.ht")
-	objects = append(objects, object{u1, true})
-	u2, _ := url.Parse("https://sr.ht/metrics")
-	objects = append(objects, object{u2, false})
-	u3, _ := url.Parse("https://codeberg.org/ar324/gofe")
-	objects = append(objects, object{u3, true})
-	u4, _ := url.Parse("https://codeberg.org/ar324/gofe/commit/cbea66088703398043cb6dab45edfa917134a9c4")
-	objects = append(objects, object{u4, false})
+	testcases := []struct {
+		u       *url.URL
+		allowed bool
+	}{
+		{parse("https://sr.ht"), true},
+		{parse("https://sr.ht/metrics"), false},
+		{parse("https://codeberg.org/ar324/gofe"), true},
+		{parse("https://codeberg.org/ar324/gofe/commit/cbea66088703398043cb6dab45edfa917134a9c4"), false},
+	}
 
-	for _, object := range objects {
-		y, err := Allowed(object.u)
+	for _, test := range testcases {
+		y, err := Allowed(test.u)
 		if err != nil {
-			t.Fatalf("err on %v: %v", object.u, err)
+			t.Errorf("err on %v: %v", test.u, err)
 		}
-		if object.allowed != y {
-			t.Fatalf("mismatch on %v: expected: %v; found: %v", object.u, object.allowed, y)
+		if test.allowed != y {
+			t.Errorf("mismatch on %v: expected: %v; found: %v", test.u, test.allowed, y)
 		} else {
-			t.Logf("success on %v: expected: %v; found: %v", object.u, object.allowed, y)
+			t.Logf("success on %v: expected: %v; found: %v", test.u, test.allowed, y)
 		}
 	}
+}
+
+func parse(s string) *url.URL {
+	u, err := url.Parse(s)
+	if err != nil {
+		return nil
+	}
+	return u
 }
