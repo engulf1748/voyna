@@ -12,6 +12,10 @@ import (
 )
 
 func Allowed(u *url.URL) (bool, error) {
+	if u == nil {
+		return false, constants.ErrNilURL
+	}
+
 	// TODO: allow http
 	if !(u.IsAbs() && u.Scheme == "https") {
 		return false, fmt.Errorf("non-absolute or non-https link")

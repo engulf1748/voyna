@@ -56,6 +56,10 @@ func init() {
 }
 
 func Crawl(u *url.URL, ch chan site.Site, tier int) {
+	if u == nil {
+		return
+	}
+
 	rateLimitCh <- true
 	defer func() {
 		<-rateLimitCh
@@ -112,7 +116,7 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 	}
 
 	resp, err := request.Get(u)
-	if err != nil  {
+	if err != nil {
 		log4j.Logger.Printf("GET failed for %q: %v; moving on . . .\n", u, err)
 		return
 	}
@@ -145,7 +149,10 @@ func Crawl(u *url.URL, ch chan site.Site, tier int) {
 	DB.M[surl] = &s
 	DB.Unlock()
 
-	processTree(n, &s)
+	err = processTree(n, &s)
+	if err != nil {
+		// TODO
+	}
 
 	for _, u := range s.Links {
 		go Crawl(u, ch, tier+1)

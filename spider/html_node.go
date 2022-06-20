@@ -1,6 +1,7 @@
 package spider
 
 import (
+	"errors"
 	"net/url"
 	"strings"
 
@@ -15,8 +16,13 @@ var ignore = map[string]bool{
 	"link":   true,
 }
 
+var ErrNilNode = errors.New("nil *html.Node")
+
 // Processes an html.Node an places data in the passed Site pointer. Ensure s.URL is filled in.
-func processTree(n *html.Node, s *site.Site) {
+func processTree(n *html.Node, s *site.Site) error {
+	if n == nil {
+		return ErrNilNode
+	}
 	var links []*url.URL
 	// s.Content
 	var b strings.Builder
@@ -24,6 +30,9 @@ func processTree(n *html.Node, s *site.Site) {
 	var keywords []string
 	var f func(*html.Node)
 	f = func(n *html.Node) {
+		if n == nil {
+			return
+		}
 		if n.Type == html.ElementNode || n.Type == html.DocumentNode {
 			if n.Data == "a" {
 				for _, v := range n.Attr {
@@ -74,4 +83,5 @@ func processTree(n *html.Node, s *site.Site) {
 	s.Content = b.String()
 	s.Links = links
 	s.Keywords = keywords
+	return nil
 }
