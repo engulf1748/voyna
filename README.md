@@ -23,6 +23,7 @@ For subjectively excellent results, we require a federated deployment of a searc
 * https://*.python.org
 * https://*.go.dev
 * https://developer.mozilla.org
+
 . . .
 
 [Voyna](https://codeberg.org/voyna/voyna) is currently a primitive prototype of the tier-based architecture, created to get a glimpse of how it would work in practice. What is remarkable is how quickly results "deteriorate" with each increasing tier. Even with "n" (the maximum depth) set to 3, we go from good, authoritative sources to websites that are notorious for serving "clickbaity" content. Such is the connectedness of the web.
