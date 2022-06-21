@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	MaxDepth  = 3
+	MaxDepth  = 2
 	RateLimit = 10000
 )
 

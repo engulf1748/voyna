@@ -2,5 +2,9 @@
 # [scheme:][//[userinfo@]host][/]path[?query][#fragment]
 # Only the scheme and the host will be considered; the rest will be ignored.
 
-https://codeberg.org
-https://sourcehut.org
+https://docs.harelang.org
+https://go.dev
+https://pkg.go.dev
+https://developer.mozilla.org
+https://harelang.org
+https://docs.python.org
