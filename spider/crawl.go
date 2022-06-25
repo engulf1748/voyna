@@ -27,7 +27,7 @@ type InMemoryDB struct {
 	M    map[string]*site.Site
 	Seen map[string]bool
 	// struct embedding--nice!
-	sync.Mutex
+	sync.RWMutex
 }
 
 // unlike safeSeen, this deals only with hostnames: we need to prevent tier overriding

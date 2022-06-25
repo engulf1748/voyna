@@ -34,8 +34,8 @@ func (r Results) Len() int {
 
 func Search(query string) Results {
 	var res Results
-	spider.DB.Lock()
-	defer spider.DB.Unlock()
+	spider.DB.RLock()
+	defer spider.DB.RUnlock()
 	for _, s := range spider.DB.M {
 		var r Result
 		if m, c := s.Match(query); m {
