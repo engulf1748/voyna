@@ -1,0 +1,23 @@
+Assume that there are a million domains in active use and each of them contains
+10 pages. This is not a very good estimate; Facebook for example probably
+contains millions of pages. Assume that each webpage is close to 50KB in size. A
+crawler would then have to crawl 10 million pages. The amount of storage
+required to store all the crawled raw webpages would be in the proximity of 50
+KB multiplied by 10 million, or 500GB. This number is a very low estimate and in
+reality is likely on the scale of petabytes, if not more.
+
+The time taken to crawl a page, which entails making an HTTP request and storing
+the raw webpage in an appropriate location, could be approximated to be 0.5
+seconds. Processing 10 million pages, if sequentially executed, would therefore
+take 10 million * 0.5 seconds, or in the vicinity of 1000 hours (40 days). It is
+best to distribute web crawling for efficiency.
+
+When we crawl in a distributed manner, we must take care to avoid redundant
+crawling. We need to make sure nodes in the system have a mechanism to determine
+if a webpage has already been crawled. Sometimes, we may need to reprocess
+crawled webpages because of a configurable timeout. Given the link of a webpage,
+we must be able to derive where it is stored. Along with raw webpage data, we
+also store with each page the time at which it was crawled and its tier.
+
+Periodically, webpages from the corpus must be refed into the crawler to ensure
+freshness.
