@@ -4,6 +4,18 @@
 
 Voyna is an open-source search engine, presently in the works.
 
+## Development
+
+Note that Voyna is in its very nascency--it is not suitable for your day-to-day
+usage. As of now, the crawler will almost certainly crash after creating a spate
+of goroutines.
+
+Run `go run .` in the project's root to start the crawler and processor. Then
+run `go run ./server/` to start the search server. Make sure to set your `DEV`
+environment variable to `true`: this gives you easy-to-read results. You can
+then query Voyna in the following way: `curl 'localhost:8080/search?q=openbsd'`.
+The 'q' query parameter represents your search query.
+
 ## Why?
 
 Today's search engines do not always yield great results--even Google. Google's algorithm (the singular "algorithm" is somewhat of a misnomer, as there is never a single algorithm for a complex system), Hummingbird, emphasizes context and meaning of text appearing on websites. Needless to say, there are very likely multiple other parts to Hummingbird--PageRank and "authority centers", for instance. Let us have a look at some sub-par (subjectively) results returned by Google.
@@ -29,18 +41,6 @@ For subjectively excellent results, we require a federated deployment of a searc
 [Voyna](https://codeberg.org/voyna/voyna) is currently a primitive prototype of the tier-based architecture, created to get a glimpse of how it would work in practice. What is remarkable is how quickly results "deteriorate" with each increasing tier. Even with "n" (the maximum depth) set to 3, we go from good, authoritative sources to websites that are notorious for serving "clickbaity" content. Such is the connectedness of the web.
 
 Apart from getting better search results, there is another reason why we require an alternative to Google (and other such closed-source search engines): fundamental code infrastructure should ideally be open-source--it is remarkable that we do not have an open-source project for something as fundamental as a search engine! I think of search engines as tooling--and most of tooling is open-source: compilers, compiler back-ends, the Linux kernel, crucial cryptography code, and so on. A transparent, open-source, and federated search engine would certainly change the world for the better.
-
-## Development
-
-Note that Voyna is in its very nascency--it is not suitable for your day-to-day
-usage. As of now, the crawler will almost certainly crash after creating a spate
-of goroutines.
-
-Run `go run .` in the project's root to start the crawler and processor. Then
-run `go run ./server/` to start the search server. Make sure to set your `DEV`
-environment variable to `true`: this gives you easy-to-read results. You can
-then query Voyna in the following way: `curl 'localhost:8080/search?q=openbsd'`.
-The 'q' query parameter represents your search query.
 
 ## License
 
